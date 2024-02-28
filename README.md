@@ -1,12 +1,11 @@
 ## запуск контейнера sudo docker
-``
-  $ compose up --build
-``
 ```
- - localhost:5050 - pgAdmin4
- - localhosh:3000 - nest.js
- - localhost:5432 - postgres
+  compose up --build
 ```
+<p>localhost:5050 - pgAdmin4</p>
+<p>localhosh:3000 - nest.js</p>
+<p>localhost:5432 - postgres</p>
+
 ## требуется настроить .env:
 ```
 TYPE =
