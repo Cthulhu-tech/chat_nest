@@ -16,17 +16,20 @@ export class UserService {
     if(!createUserDto.login || !createUserDto.password) {
       throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    const find_user = await this.userRepository.findOneBy({
+      login: createUserDto.login,
+    });
+    if(find_user) {
+      throw new HttpException('User login is not allowed', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
     const passwordBcryptSalt = bcrypt.genSaltSync(10);
     const passwordBcrypt = bcrypt.hashSync(createUserDto.password, passwordBcryptSalt);
-    
     const user = await this.userRepository.create({
       login: createUserDto.login,
       password: passwordBcrypt,
     });
     const save_user = await this.userRepository.save(user);
-
     delete save_user.password;
-    
     return save_user;
   }
   async findAll() {
@@ -72,7 +75,6 @@ export class UserService {
     }
     const update_user = await this.userRepository.save(user);
     delete update_user.password;
-
     return update_user;
   }
   async remove(id: number) {
