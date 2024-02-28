@@ -1,10 +1,14 @@
-## запуск контейнера sudo docker compose up --build
-``localhost:5050 - pgAdmin4
-  ocalhosh:3000 - nest.js
-  localhost:5432 - postgres
+## запуск контейнера sudo docker
 ``
+  $ compose up --build
+``
+```
+ - localhost:5050 - pgAdmin4
+ - localhosh:3000 - nest.js
+ - localhost:5432 - postgres
+```
 ## требуется настроить .env:
-``
+```
 TYPE =
 HOST =
 PORT =
@@ -14,7 +18,7 @@ DATABASE =
 ACCESS_TOKEN =
 REFRESH_TOKEN =
 BCRYPT_SECRET =
-``
+```
 
 
 <p align="center">
