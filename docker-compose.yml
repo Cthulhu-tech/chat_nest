@@ -1,11 +1,13 @@
-version: '3.5'
+version: '3.9'
 
 services:
   db:
-    image: postgres
+    image: postgres:13.3
     restart: always
     environment:
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: ${DATABASE}
+      POSTGRES_USER: ${USERNAME}
+      POSTGRES_PASSWORD: ${PASSWORD}
     container_name: postgres
     volumes:
       - ./pgdata:/var/lib/postgresql/data
