@@ -1,3 +1,19 @@
+<p>запуск контейнера sudo docker compose up --build</p>
+<p align="center">localhost:5050 - pgAdmin4</p>
+<p align="center">localhosh:3000 - nest.js</p>
+<p align="center">localhost:5432 - postgres</p>
+<p>требуется настроить .env:</p>
+<p align="center">TYPE = </p>
+<p align="center">HOST = </p>
+<p align="center">PORT = </p>
+<p align="center">USERNAME = </p>
+<p align="center">PASSWORD = </p>
+<p align="center">DATABASE = </p>
+<p align="center">ACCESS_TOKEN = </p>
+<p align="center">REFRESH_TOKEN = </p>
+<p align="center">BCRYPT_SECRET = </p>
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
