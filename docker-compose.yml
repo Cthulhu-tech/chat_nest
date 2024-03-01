@@ -26,6 +26,7 @@ services:
       - USERNAME=${USERNAME}
       - PASSWORD=${PASSWORD}
       - DATABASE=${DATABASE}
+      - CORS_HOST=${CORS_HOST}
     ports:
       - '3000:3000'
     depends_on:
