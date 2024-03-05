@@ -45,7 +45,6 @@ export class TokenService {
     }
   }
   async login(createTokenDto: CreateTokenDto, response: Response) {
-    console.log(createTokenDto, response)
     if(!createTokenDto.login || !createTokenDto.password) {
       throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
     }

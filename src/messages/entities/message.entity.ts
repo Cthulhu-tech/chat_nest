@@ -4,8 +4,10 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn,
+  OneToMany,
+  ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -16,15 +18,15 @@ export class Message {
   @Column()
   message: string;
 
-  @OneToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn()
   user_create: User;
 
-  @OneToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn()
   user_accepted: User;
 
-  @OneToOne(() => Chat, (chat) => chat.id)
+  @ManyToOne(() => Chat, (chat) => chat.id)
   @JoinColumn()
   chat: Chat;
 }
