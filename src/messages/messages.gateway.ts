@@ -26,8 +26,8 @@ export class MessagesGateway implements OnGatewayDisconnect {
 	}
 
   @SubscribeMessage('createMessage')
-  create(@MessageBody() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
+  create(@MessageBody() createMessageDto: CreateMessageDto, @ConnectedSocket() client: Socket) {
+    return this.messagesService.create(createMessageDto, client);
   }
 
   @SubscribeMessage('createRoom')

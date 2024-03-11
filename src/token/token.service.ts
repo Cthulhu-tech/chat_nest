@@ -71,9 +71,9 @@ export class TokenService {
     if(!refresh_token) {
       throw new HttpException('Token not valid', HttpStatus.UNAUTHORIZED);
     }
-    const { id } = jwt.verify(refresh_token, process.env.REFRESH_TOKEN);
+    const { data } = jwt.verify(refresh_token, process.env.REFRESH_TOKEN);
     const find_user = await this.userRepository.findOneBy({
-      id,
+      id: data.id,
     });
     if(!find_user) {
       throw new HttpException('Token not valid', HttpStatus.UNAUTHORIZED);
