@@ -17,5 +17,6 @@ export const OrmModule = TypeOrmModule.forRootAsync({
     entities: [User, Token, Chat, Message],
     synchronize: true,
     dropSchema: true,
+    ssl: true
   }),
 });
