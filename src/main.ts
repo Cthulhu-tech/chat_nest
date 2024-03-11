@@ -13,7 +13,7 @@ async function bootstrap() {
 			"Authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
 	});
   app.use(cookieParser());
-  await app.listen(3000, '0.0.0.0', void function (err: Error) {
+  await app.listen(3000, '0.0.0.0.', void function (err: Error) {
     if (err) throw err
     console.log(`Listening on port ${3000}`);
   })
