@@ -1,3 +1,33 @@
+## задача 1.
+
+```
+  const findLst = func(s, a, b) => {
+    const findLastIndex = (str, char) => {
+        for (let i = str.length - 1; i >= 0; i--) {
+            if (str[i] === char) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    const aIndex = findLastIndex(s, a);
+    const bIndex = findLastIndex(s, b);
+
+    if (aIndex !== -1) {
+        if (bIndex === -1) {
+            return aIndex;
+        } else {
+            return Math.max(aIndex, bIndex);
+        }
+    } else if (bIndex !== -1) {
+        return bIndex;
+    } else {
+        return -1;
+    }
+}
+```
+
 ## запуск контейнера sudo docker
 ```
   compose up --build
