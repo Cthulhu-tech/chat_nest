@@ -2,17 +2,9 @@
 
 ```
   const findLst = func(s, a, b) => {
-    const findLastIndex = (str, char) => {
-        for (let i = str.length - 1; i >= 0; i--) {
-            if (str[i] === char) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
-    const aIndex = findLastIndex(s, a);
-    const bIndex = findLastIndex(s, b);
+    const aIndex = s.lastIndexOf(a);
+    const bIndex = s.lastIndexOf(b);
 
     if (aIndex !== -1) {
         if (bIndex === -1) {
