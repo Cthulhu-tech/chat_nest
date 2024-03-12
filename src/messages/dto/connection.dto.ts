@@ -1,4 +1,8 @@
+import { IsNotEmpty } from "class-validator";
+
 export class ConnectionMessageDto {
-    id: number;
-    login: string;
+  @IsNotEmpty()
+  id: number;
+  @IsNotEmpty()
+  login: string;
 }

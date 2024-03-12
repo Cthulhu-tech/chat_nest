@@ -1,5 +1,10 @@
+import { IsNotEmpty } from "class-validator";
+
 export class CreateMessageDto {
-    message: string;
-    chat: number;
-    user_create: number;
+  @IsNotEmpty()
+  message: string;
+  @IsNotEmpty()
+  chat: number;
+  @IsNotEmpty()
+  user_create: number;
 }

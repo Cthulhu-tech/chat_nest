@@ -16,6 +16,6 @@ export const OrmModule = TypeOrmModule.forRootAsync({
     database: config.get('DATABASE'),
     entities: [User, Token, Chat, Message],
     synchronize: true,
-    dropSchema: true
+    dropSchema: true,
   }),
 });

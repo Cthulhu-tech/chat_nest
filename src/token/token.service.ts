@@ -16,24 +16,34 @@ export class TokenService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  private async tokenHandler(find_user: User, response: Response) {
-    const refresh_token_time = Math.floor(Date.now() + (86400000 * 7));
-    const access: string = await jwt.sign({
-      data: {
-        login: find_user.login,
-        id: find_user.id,
-      }
-    }, process.env.ACCESS_TOKEN, {
-      expiresIn: '15m',
-    });
-    const refresh: string = await jwt.sign({data: {
-      login: find_user.login,
-      id: find_user.id,
-    }}, process.env.REFRESH_TOKEN,{
-      expiresIn: '7d',
-    });
-    await response.cookie('refresh_token', refresh, {
-      expires: new Date(refresh_token_time),
+  private async tokenHandler(findUser: User, response: Response) {
+    const refreshTokenTime = Math.floor(Date.now() + 86400000 * 7);
+    const access: string = await jwt.sign(
+      {
+        data: {
+          login: findUser.login,
+          id: findUser.id,
+        },
+      },
+      process.env.ACCESS_TOKEN,
+      {
+        expiresIn: '15m',
+      },
+    );
+    const refresh: string = await jwt.sign(
+      {
+        data: {
+          login: findUser.login,
+          id: findUser.id,
+        },
+      },
+      process.env.REFRESH_TOKEN,
+      {
+        expiresIn: '7d',
+      },
+    );
+    await response.cookie('refreshToken', refresh, {
+      expires: new Date(refreshTokenTime),
       sameSite: 'none',
       httpOnly: true,
       secure: true,
@@ -42,57 +52,64 @@ export class TokenService {
     return {
       refresh,
       access,
-    }
+    };
   }
   async login(createTokenDto: CreateTokenDto, response: Response) {
-    if(!createTokenDto.login || !createTokenDto.password) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!createTokenDto.login || !createTokenDto.password) {
+      throw new HttpException(
+        '422 Unprocessable entity',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
-    const find_user = await this.userRepository.findOneBy({
+    const findUser = await this.userRepository.findOneBy({
       login: createTokenDto.login,
     });
-    if(!find_user) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!findUser) {
+      throw new HttpException(
+        '422 Unprocessable entity',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
-    const result = await bcrypt.compare(createTokenDto.password, find_user.password);
-    if(!result) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
+    const result = await bcrypt.compare(
+      createTokenDto.password,
+      findUser.password,
+    );
+    if (!result) {
+      throw new HttpException(
+        '422 Unprocessable entity',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
-    const { refresh, access } = await this.tokenHandler(find_user, response);
-    const token_save = await this.tokenRepository.create({
+    const { refresh, access } = await this.tokenHandler(findUser, response);
+    const tokenSave = await this.tokenRepository.create({
       refresh,
-      user: find_user,
+      user: findUser,
     });
-    await this.tokenRepository.save(token_save);
+    await this.tokenRepository.save(tokenSave);
     return { access };
   }
   async update(response: Response, request: Request) {
-    const refresh_token = request.cookies["refresh_token"];
-    if(!refresh_token) {
-      throw new HttpException('Token not valid', HttpStatus.UNAUTHORIZED);
-    }
-    const { data } = jwt.verify(refresh_token, process.env.REFRESH_TOKEN);
-    const find_user = await this.userRepository.findOneBy({
-      id: data.id,
+    const findUser = await this.userRepository.findOneBy({
+      id: request.body.data.id,
     });
-    if(!find_user) {
+    if (!findUser) {
       throw new HttpException('Token not valid', HttpStatus.UNAUTHORIZED);
     }
-    const { refresh, access } = await this.tokenHandler(find_user, response);
-    const token_save = await this.tokenRepository.create({
+    const { refresh, access } = await this.tokenHandler(findUser, response);
+    const tokenSave = await this.tokenRepository.create({
       refresh,
-      user: find_user,
+      user: findUser,
     });
-    await this.tokenRepository.save(token_save);
+    await this.tokenRepository.save(tokenSave);
     return { access };
   }
   async logout(response: Response) {
-    await response.clearCookie("refresh_token", {
-			path: "/",
-			sameSite: "none",
-			secure: true,
-		});
+    await response.clearCookie('refreshToken', {
+      path: '/',
+      sameSite: 'none',
+      secure: true,
+    });
     response.status(204);
-		return;
+    return;
   }
 }

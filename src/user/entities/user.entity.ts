@@ -1,11 +1,5 @@
 import { Chat } from 'src/chat/entities/chat.entity';
-import { Token } from 'src/token/entities/token.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 
 @Entity()
 export class User {

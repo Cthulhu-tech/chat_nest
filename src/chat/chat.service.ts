@@ -15,12 +15,14 @@ export class ChatService {
     private readonly userRepository: Repository<User>,
   ) {}
   async create(createChatDto: CreateChatDto) {
-    if(!createChatDto.name || !createChatDto.user) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-    const findUser = await this.userRepository.findOneBy({id: createChatDto.user});
-    if(!findUser) {
-      throw new HttpException(`404 Not found user_id: ${createChatDto.user}`, HttpStatus.NOT_FOUND);
+    const findUser = await this.userRepository.findOneBy({
+      id: createChatDto.user,
+    });
+    if (!findUser) {
+      throw new HttpException(
+        `404 Not found user_id: ${createChatDto.user}`,
+        HttpStatus.NOT_FOUND,
+      );
     }
     return await this.chatRepository.save({
       name: createChatDto.name,
@@ -35,34 +37,40 @@ export class ChatService {
     };
   }
   async findOne(id: number) {
-    if(!id) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!id) {
+      throw new HttpException(
+        '422 Unprocessable entity',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
     return await this.chatRepository.findOneBy({ id });
   }
   async update(id: number, updateChatDto: UpdateChatDto) {
-    const uchatKeyInUpdate = Object.keys(updateChatDto);
+    const updateChatKey = Object.keys(updateChatDto);
     const chat = await this.chatRepository.findOneBy({ id });
-    if(!uchatKeyInUpdate.length) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!updateChatKey.length) {
+      throw new HttpException(
+        '422 Unprocessable entity',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
-    if(!chat || !id) {
+    if (!chat) {
       throw new HttpException(`404 Not found chat`, HttpStatus.NOT_FOUND);
     }
-    for(let keys of uchatKeyInUpdate) {
-      if(!updateChatDto[keys]) {
-        throw new HttpException(`422 Unprocessable emtity. Keys - ${keys}`, HttpStatus.UNPROCESSABLE_ENTITY);
+    for (const keys of updateChatKey) {
+      if (!updateChatDto[keys]) {
+        throw new HttpException(
+          `422 Unprocessable entity. Keys - ${keys}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
       }
       chat[keys] = updateChatDto[keys];
     }
     return await this.chatRepository.save(chat);
   }
   async remove(id: number) {
-    if(!id) {
-      throw new HttpException('422 Unprocessable emtity', HttpStatus.UNPROCESSABLE_ENTITY);
-    }
     const chat = await this.chatRepository.findOneBy({ id });
-    if(!chat) {
+    if (!chat) {
       throw new HttpException('404 Not found', HttpStatus.NOT_FOUND);
     }
     return await this.chatRepository.remove(chat);

@@ -1,4 +1,8 @@
+import { IsNotEmpty } from "class-validator";
+
 export class CreateTokenDto {
-    login: string;
-    password: string;
+  @IsNotEmpty()
+  login: string;
+  @IsNotEmpty()
+  password: string;
 }

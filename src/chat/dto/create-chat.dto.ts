@@ -1,4 +1,8 @@
+import { IsNotEmpty } from "class-validator";
+
 export class CreateChatDto {
-    name: string;
-    user: number;
+  @IsNotEmpty()
+  name: string;
+  @IsNotEmpty()
+  user: number;
 }
