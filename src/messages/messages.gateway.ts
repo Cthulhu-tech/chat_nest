@@ -6,22 +6,20 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { Socket } from 'socket.io';
 import { ConnectionMessageDto } from './dto/connection.dto';
-import { UseGuards } from '@nestjs/common';
-import { FindChatGuard, FindUserGuard } from './message.guard';
+import { ValidationChatConnectionPipe, ValidationChatPipe } from './mesages.pipes';
+import { CreateMessagePipeDto } from './dto/create-message-pipe.dto';
 
 @WebSocketGateway({ cors: '*:*' })
 export class MessagesGateway implements OnGatewayDisconnect {
   constructor(private readonly messagesService: MessagesService) {}
-  @UseGuards(FindChatGuard)
   @SubscribeMessage('joinChat')
   joinRoom(
-    @MessageBody() ConnectionMessageDto: ConnectionMessageDto,
+    @MessageBody(ValidationChatConnectionPipe) connectionMessageDto: ConnectionMessageDto,
     @ConnectedSocket() client: Socket,
   ) {
-    return this.messagesService.joinChat(ConnectionMessageDto, client);
+    return this.messagesService.joinChat(connectionMessageDto, client);
   }
   @SubscribeMessage('getMessages')
   getMessages(
@@ -30,14 +28,12 @@ export class MessagesGateway implements OnGatewayDisconnect {
   ) {
     return this.messagesService.getMessages(ConnectionMessageDto, client);
   }
-  @UseGuards(FindUserGuard)
-  @UseGuards(FindChatGuard)
   @SubscribeMessage('createMessage')
   create(
-    @MessageBody() createMessageDto: CreateMessageDto,
+    @MessageBody(ValidationChatPipe) createMessagePipeDto: CreateMessagePipeDto,
     @ConnectedSocket() client: Socket,
   ) {
-    return this.messagesService.create(createMessageDto, client);
+    return this.messagesService.create(createMessagePipeDto, client);
   }
   handleDisconnect(client: Socket) {
     return this.messagesService.disconnect(client);

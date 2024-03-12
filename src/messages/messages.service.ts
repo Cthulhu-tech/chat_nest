@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { ConnectionMessageDto } from './dto/connection.dto';
 import { Socket } from 'socket.io';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from './entities/message.entity';
+import { CreateMessagePipeDto } from './dto/create-message-pipe.dto';
 
 @Injectable()
 export class MessagesService {
@@ -12,46 +12,46 @@ export class MessagesService {
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
   ) {}
-  connection(ConnectionMessageDto: ConnectionMessageDto) {
-    console.log(ConnectionMessageDto);
+  connection(connectionMessageDto: ConnectionMessageDto) {
+    console.log(connectionMessageDto);
   }
-  async create(createMessageDto: CreateMessageDto, client: Socket) {
+  async create(createMessagePipeDto: CreateMessagePipeDto, client: Socket) {
     const newMessage = await this.messageRepository.create({
-      message: createMessageDto.message,
-      user_create: client.data.findUser,
-      user_accepted: client.data.findUser,
-      chat: client.data.findChat,
+      message: createMessagePipeDto.message,
+      user_create: createMessagePipeDto.userData,
+      user_accepted: createMessagePipeDto.userData,
+      chat: createMessagePipeDto.chatData,
     });
     const messageSave = await this.messageRepository.save(newMessage);
     delete messageSave.user_accepted;
     delete messageSave.user_create;
     client.broadcast
-      .to(client.data.findChat.id.toString())
-      .emit('createMessage', { message: messageSave, room_id: client.data.findChat.id });
+      .to(createMessagePipeDto.chatData.id.toString())
+      .emit('createMessage', { message: messageSave, room_id: createMessagePipeDto.chatData.id });
     client.emit('createMessage', {
       message: messageSave,
-      room_id: client.data.findChat.id,
+      room_id: createMessagePipeDto.chatData.id,
     });
   }
-  async joinChat(ConnectionMessageDto: ConnectionMessageDto, client: Socket) {
-    const roomId = ConnectionMessageDto.id.toString();
+  async joinChat(connectionMessageDto: ConnectionMessageDto, client: Socket) {
+    const roomId = connectionMessageDto.id.toString();
     await client.join(roomId);
     client.broadcast
       .to(roomId)
-      .emit('joinChat', { user: ConnectionMessageDto.login, room_id: roomId });
+      .emit('joinChat', { user: connectionMessageDto.login, room_id: roomId });
   }
   async getMessages(
-    ConnectionMessageDto: ConnectionMessageDto,
+    connectionMessageDto: ConnectionMessageDto,
     client: Socket,
   ) {
     const message = await this.messageRepository
       .createQueryBuilder('message')
       .leftJoinAndSelect('message.chat', 'chat')
       .where('chat.id = :id', {
-        id: ConnectionMessageDto.id,
+        id: connectionMessageDto.id,
       })
       .getMany();
-    client.emit('getMessages', { message, room_id: ConnectionMessageDto.id });
+    client.emit('getMessages', { message, room_id: connectionMessageDto.id });
   }
   disconnect(client: Socket) {
     client.broadcast.emit('userDisconect', { user: client.id });

@@ -1,32 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entities/chat.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/user/entities/user.entity';
+import { CreateChatPipeDto } from './dto/create-chat-pipe';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectRepository(Chat)
     private readonly chatRepository: Repository<Chat>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
   ) {}
-  async create(createChatDto: CreateChatDto) {
-    const findUser = await this.userRepository.findOneBy({
-      id: createChatDto.user,
-    });
-    if (!findUser) {
-      throw new HttpException(
-        `404 Not found user_id: ${createChatDto.user}`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+  async create(createChatDto: CreateChatPipeDto) {
     return await this.chatRepository.save({
       name: createChatDto.name,
-      create: findUser,
+      create: createChatDto.userData,
     });
   }
   async findAll() {
@@ -37,12 +25,6 @@ export class ChatService {
     };
   }
   async findOne(id: number) {
-    if (!id) {
-      throw new HttpException(
-        '422 Unprocessable entity',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
     return await this.chatRepository.findOneBy({ id });
   }
   async update(id: number, updateChatDto: UpdateChatDto) {
