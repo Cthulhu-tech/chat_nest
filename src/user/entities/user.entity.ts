@@ -13,12 +13,12 @@ export class User {
   password: string;
 
   @ManyToMany(() => Chat, (chat) => chat.id, {
-    onDelete: "CASCADE"
-})
+    onDelete: 'CASCADE',
+  })
   chat: Chat[];
 
   @ManyToMany(() => Chat, (chat) => chat.id, {
-    onDelete: "CASCADE"
-})
+    onDelete: 'CASCADE',
+  })
   chat_create: Chat[];
 }

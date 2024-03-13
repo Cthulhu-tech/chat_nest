@@ -27,7 +27,10 @@ export class MessagesService {
     delete messageSave.user_create;
     client.broadcast
       .to(createMessagePipeDto.chatData.id.toString())
-      .emit('createMessage', { message: messageSave, room_id: createMessagePipeDto.chatData.id });
+      .emit('createMessage', {
+        message: messageSave,
+        room_id: createMessagePipeDto.chatData.id,
+      });
     client.emit('createMessage', {
       message: messageSave,
       room_id: createMessagePipeDto.chatData.id,

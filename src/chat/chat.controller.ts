@@ -12,7 +12,11 @@ import {
 import { ChatService } from './chat.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CreateChatPipeDto } from './dto/create-chat-pipe.dto';
-import { ValidationChatDTOPipe, ValidationCreateChatDTOPipe, ValidationFindChatDTOPipe } from './chat.pipes';
+import {
+  ValidationChatDTOPipe,
+  ValidationCreateChatDTOPipe,
+  ValidationFindChatDTOPipe,
+} from './chat.pipes';
 import { Chat } from './entities/chat.entity';
 import { TokenGuard } from 'src/token/token.guard';
 
@@ -36,7 +40,7 @@ export class ChatController {
   @UseGuards(TokenGuard)
   update(
     @Param(ValidationFindChatDTOPipe) chat: Chat,
-    @Body(ValidationChatDTOPipe) updateChatDto: UpdateChatDto
+    @Body(ValidationChatDTOPipe) updateChatDto: UpdateChatDto,
   ) {
     return this.chatService.update(chat, updateChatDto);
   }

@@ -13,7 +13,10 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { ValidationCreateUserDTOPipe, ValidationFindUserDTOPipe } from './user.pipe';
+import {
+  ValidationCreateUserDTOPipe,
+  ValidationFindUserDTOPipe,
+} from './user.pipe';
 import { TokenGuard } from 'src/token/token.guard';
 
 @Controller('user')
@@ -33,7 +36,10 @@ export class UserController {
   }
   @Patch(':id')
   @UseGuards(TokenGuard)
-  update(@Param(ValidationFindUserDTOPipe) user: User, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param(ValidationFindUserDTOPipe) user: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.update(user, updateUserDto);
   }
   @Delete(':id')

@@ -16,14 +16,14 @@ export class Chat {
   name: string;
 
   @ManyToMany(() => User, (user) => user.id, {
-    onDelete: "CASCADE"
-})
+    onDelete: 'CASCADE',
+  })
   @JoinTable()
   create_user_id: User;
 
   @ManyToMany(() => User, (user) => user.id, {
-    onDelete: "CASCADE"
-})
+    onDelete: 'CASCADE',
+  })
   @JoinTable()
   user: User[];
 }

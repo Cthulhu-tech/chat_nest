@@ -16,8 +16,8 @@ export class Token {
   refresh: string;
 
   @ManyToOne(() => User, (user) => user.id, {
-    onDelete: "CASCADE"
-})
+    onDelete: 'CASCADE',
+  })
   @JoinTable()
   user: User;
 }

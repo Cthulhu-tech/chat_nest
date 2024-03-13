@@ -8,7 +8,10 @@ import {
 import { MessagesService } from './messages.service';
 import { Socket } from 'socket.io';
 import { ConnectionMessageDto } from './dto/connection.dto';
-import { ValidationChatConnectionPipe, ValidationChatPipe } from './mesages.pipes';
+import {
+  ValidationChatConnectionPipe,
+  ValidationChatPipe,
+} from './mesages.pipes';
 import { CreateMessagePipeDto } from './dto/create-message-pipe.dto';
 
 @WebSocketGateway({ cors: '*:*' })
@@ -16,7 +19,8 @@ export class MessagesGateway implements OnGatewayDisconnect {
   constructor(private readonly messagesService: MessagesService) {}
   @SubscribeMessage('joinChat')
   joinRoom(
-    @MessageBody(ValidationChatConnectionPipe) connectionMessageDto: ConnectionMessageDto,
+    @MessageBody(ValidationChatConnectionPipe)
+    connectionMessageDto: ConnectionMessageDto,
     @ConnectedSocket() client: Socket,
   ) {
     return this.messagesService.joinChat(connectionMessageDto, client);
