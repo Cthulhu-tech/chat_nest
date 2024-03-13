@@ -33,8 +33,8 @@ export class ChatController {
     return this.chatService.findAll();
   }
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.chatService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) chatId: number) {
+    return this.chatService.findOne(chatId);
   }
   @Patch(':id')
   @UseGuards(TokenGuard)

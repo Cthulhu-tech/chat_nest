@@ -31,8 +31,8 @@ export class UserController {
     return this.userService.findAll();
   }
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) userId: number) {
+    return this.userService.findOne(userId);
   }
   @Patch(':id')
   @UseGuards(TokenGuard)

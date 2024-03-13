@@ -24,8 +24,8 @@ export class ChatService {
       count: chat[1],
     };
   }
-  async findOne(id: number) {
-    return await this.chatRepository.findOneBy({ id });
+  async findOne(chatId: number) {
+    return await this.chatRepository.findOneBy({ id: chatId });
   }
   async update(chat: Chat, updateChatDto: UpdateChatDto) {
     const updateChatKey = Object.keys(updateChatDto);

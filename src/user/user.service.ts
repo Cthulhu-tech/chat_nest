@@ -38,10 +38,10 @@ export class UserService {
       count: users[1],
     };
   }
-  async findOne(id: number) {
+  async findOne(userId: number) {
     return await this.userRepository.findOne({
       where: {
-        id,
+        id: userId,
       },
       select: {
         id: true,
