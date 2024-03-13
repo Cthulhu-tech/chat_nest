@@ -13,15 +13,6 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
   async create(createUserDto: CreateUserDto) {
-    const findUser = await this.userRepository.findOneBy({
-      login: createUserDto.login,
-    });
-    if (findUser) {
-      throw new HttpException(
-        'User login is not allowed',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
     const passwordBcryptSalt = bcrypt.genSaltSync(10);
     const passwordBcrypt = bcrypt.hashSync(
       createUserDto.password,
@@ -58,15 +49,8 @@ export class UserService {
       },
     });
   }
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(user: User, updateUserDto: UpdateUserDto) {
     const userKeyInUpdate = Object.keys(updateUserDto);
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
-      throw new HttpException(
-        `404 Not found user: ${updateUserDto.login}`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
     for (const keys of userKeyInUpdate) {
       user[keys] = updateUserDto[keys];
     }
@@ -74,11 +58,7 @@ export class UserService {
     delete update_user.password;
     return update_user;
   }
-  async remove(id: number) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
-      throw new HttpException('404 Not found', HttpStatus.NOT_FOUND);
-    }
+  async remove(user: User) {
     return await this.userRepository.remove(user);
   }
 }
