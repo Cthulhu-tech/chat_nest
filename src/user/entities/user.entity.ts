@@ -12,9 +12,13 @@ export class User {
   @Column()
   password: string;
 
-  @ManyToMany(() => Chat, (chat) => chat.id)
+  @ManyToMany(() => Chat, (chat) => chat.id, {
+    onDelete: "CASCADE"
+})
   chat: Chat[];
 
-  @ManyToMany(() => Chat, (chat) => chat.id)
+  @ManyToMany(() => Chat, (chat) => chat.id, {
+    onDelete: "CASCADE"
+})
   chat_create: Chat[];
 }

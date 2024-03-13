@@ -16,15 +16,21 @@ export class Message {
   @Column()
   message: string;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, {
+    onDelete: "CASCADE"
+})
   @JoinColumn()
   user_create: User;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, {
+    onDelete: "CASCADE"
+})
   @JoinColumn()
   user_accepted: User;
 
-  @ManyToOne(() => Chat, (chat) => chat.id)
+  @ManyToOne(() => Chat, (chat) => chat.id, {
+    onDelete: "CASCADE"
+})
   @JoinColumn()
   chat: Chat;
 }
